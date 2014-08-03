@@ -37,10 +37,11 @@
 #include <netinet/ip_icmp.h>
 #include <net/ethernet.h>
 
+// See http://man7.org/linux/man-pages/man3/getifaddrs.3.html
+
 int main(int argc, char** argv)
 {
-	struct ifaddrs *ifaddr, *ifa;
-	int family, s, n;
+	struct ifaddrs *ifaddr = 0;
 	char host[NI_MAXHOST];
 
 	if (getifaddrs(&ifaddr) == -1) {
@@ -51,6 +52,8 @@ int main(int argc, char** argv)
 	/* Walk through linked list, maintaining head pointer so we
 	can free list later */
 
+	int n = 0;
+	struct ifaddrs *ifa = 0;
 	for (ifa = ifaddr, n = 0; ifa != NULL; ifa = ifa->ifa_next, n++)
 	{
 		if (ifa->ifa_addr == NULL)
@@ -70,7 +73,7 @@ int main(int argc, char** argv)
 
 		if (family == AF_INET || family == AF_INET6)
 		{
-			s = getnameinfo(ifa->ifa_addr, (family == AF_INET) ? sizeof(struct sockaddr_in) : sizeof(struct sockaddr_in6), host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+			int s = getnameinfo(ifa->ifa_addr, (family == AF_INET) ? sizeof(struct sockaddr_in) : sizeof(struct sockaddr_in6), host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
 			
 			if (s != 0)
 			{
