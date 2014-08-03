@@ -43,39 +43,12 @@ static const unsigned MAX_MTU = 512;
 // See http://sock-raw.org/papers/sock_raw
 // See http://austinmarton.wordpress.com/2011/09/14/sending-raw-ethernet-packets-from-a-specific-interface-in-c-on-linux/
 
-unsigned short csum(unsigned short *ptr, int nbytes)
-{
-    register long sum;
-    unsigned short oddbyte;
-    register unsigned short answer;
- 
-    sum = 0;
-    while (nbytes > 1)
-    {
-        sum += *ptr++;
-        nbytes -= 2;
-    }
- 
-    if (nbytes == 1)
-    {
-        oddbyte = 0;
-        *((unsigned char *) & oddbyte) = *(unsigned char *) ptr;
-        sum += oddbyte;
-    }
- 
-    sum = (sum >> 16) + (sum & 0xffff);
-    sum += (sum >> 16);
-    answer = ~sum;
- 
-    return (answer);
-}
-
 /*
  * in_cksum --
  * Checksum routine for Internet Protocol
  * family headers (C Version)
  */
-unsigned short in_cksum(unsigned short *addr, int len)
+unsigned short cksum(unsigned short *addr, int len)
 {
     register int sum = 0;
     u_short answer = 0;
@@ -208,9 +181,9 @@ int main(int argc, char** argv)
          
         //recalculate the icmp header checksum since we are filling the payload with random characters everytime
         icmp->icmp_cksum = 0;
-        icmp->icmp_cksum = in_cksum((unsigned short *)icmp, sizeof(struct icmp));
+        icmp->icmp_cksum = cksum((unsigned short *)icmp, sizeof(struct icmp));
         
-        ip->ip_sum = in_cksum((unsigned short*)ip, sizeof(struct ip));
+        ip->ip_sum = cksum((unsigned short*)ip, sizeof(struct ip));
         if (sendto(s, packet, packet_size, 0, (struct sockaddr*) &servaddr, sizeof (servaddr)) != packet_size) 
         {
         	fprintf(stderr, "Unable to send packet, reason: %s\n", strerror(errno));
