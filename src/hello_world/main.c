@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-	printf("Hello World!\n");
+	printf("Hello World!\n"); // Declared in <stdio.h>
 	
-	return EXIT_SUCCESS; // Defined in <stdlib.h>
+	return EXIT_SUCCESS;      // Declared in <stdlib.h>
 }
