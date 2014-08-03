@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 	res = sendto(s, buffer, real_size, 0, (struct sockaddr *)&servaddr, sizeof(servaddr));
 	if(res != real_size) 
 	{
-		fprintf(stderr, "Unable to send request\n");
+		fprintf(stderr, "Unable to send request, reason: %s\n", strerror(errno));
 		
 		// Free allocated memory
 		free(buffer);
