@@ -19,4 +19,4 @@ build: dirs
 	cd ./build &&  cmake ../ && make
 
 test: build 
-	./build/bin/HelloWorld
+	./build/bin/hello_world
