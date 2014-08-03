@@ -21,3 +21,4 @@ build: dirs
 test: build
 	./build/bin/dns_lookup "seznam.cz" 
 	./build/bin/hello_world "travis"
+	./build/bin/thread 6
