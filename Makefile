@@ -1,8 +1,10 @@
 # This is Makefile
 
+build:
+	echo "This is build ..."
 test:
-	echo "This is Test"
+	echo "This is test ..."
 
 all:
-	test
+	build
 
