@@ -18,5 +18,6 @@ build: dirs
 	echo "Building ..."
 	cd ./build &&  cmake ../ && make
 
-test: build 
-	./build/bin/hello_world
+test: build
+	./build/bin/dns_lookup "seznam.cz" 
+	./build/bin/hello_world "travis"
