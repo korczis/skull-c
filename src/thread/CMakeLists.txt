@@ -7,3 +7,7 @@ set(CMAKE_C_FLAGS "-std=c99")
 file(GLOB CPP_FILES *.c)
 
 add_executable(${PROJECT_NAME} ${CPP_FILES})
+
+TARGET_LINK_LIBRARIES(
+	thread
+)
