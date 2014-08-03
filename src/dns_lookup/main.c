@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>    // strcpy
@@ -44,7 +45,7 @@ int resolve(const char* name)
 
 	// Print all aliases
 	int i = 0;
-	for(char* alias = h->h_aliases[i]; alias != NULL; i++)
+	for(char* alias = h->h_aliases[i]; alias != 0; i++)
 	{
 		fprintf(stdout, "%s\n", alias);
 	}
@@ -61,7 +62,7 @@ int resolve(const char* name)
 
 	// Print all IPs
     struct in_addr** addr_list = (struct in_addr **) h->h_addr_list;
-    for(i = 0; addr_list[i] != NULL; i++) 
+    for(i = 0; addr_list[i] != 0; i++) 
     {
         //Return the first one;
         strcpy(ip, inet_ntoa(*addr_list[i]));
@@ -80,9 +81,15 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
+	int res = 0;
 	for(int i = 1; i < argc; i++)
 	{
-		resolve(argv[i]);	
+		res = resolve(argv[i]);	
+		if(res != 0)
+		{
+			fprintf(stderr, "Unable to resolve '%s', reason: %s\n", argv[i], hstrerror(h_errno));
+			return EXIT_FAILURE;
+		}
 	}
 	
     // End with success error code - 0
