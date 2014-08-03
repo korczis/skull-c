@@ -23,4 +23,5 @@ test: build
 	./build/bin/hello_world "travis"
 	./build/bin/http_client http://google.com
 	# ./build/bin/icmp_client http://google.com
+	./build/bin/interfaces
 	./build/bin/thread 6
