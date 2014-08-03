@@ -1,19 +1,22 @@
-# This is Makefile
+.phony:
+	all
 
-.PHONY: all
+all: 
+	make dirs
+	make build
 
-bin:
+clean:
+	rm -rf bin
+	rm -rf build
+
+dirs:
 	mkdir -p bin
+	mkdir -p build
+	mkdir -p lib
 
-build:
-	echo "This is build ..."
-test:
-	echo "This is test ..."
+build: dirs
+	echo "Building ..."
+	cd ./build &&  cmake ../ && make
 
-# src/apps
-
-hello_world: src/hello_world/main.c
-	gcc -o bin/hello_world src/hello_world/main.c
-
-all: bin build
-
+test: build 
+	./build/bin/HelloWorld
