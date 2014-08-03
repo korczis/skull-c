@@ -24,30 +24,22 @@
 #include <netdb.h>     // gethostbyname
 #include <arpa/inet.h>
 
-int main(int argc, char** argv)
+int resolve(const char* name)
 {
-	// Check if there was any hostname specified on cmd-line
-	if(argc < 2) 
-	{
-		fprintf(stderr, "%s\n", "No hostname specified!");
-		return EXIT_FAILURE;
-	}
-
-	// First argument is hostname to look for
-	const char* arg_host = argv[1];
+	fprintf(stdout, "Host: %s\n", name);
 
 	// Try to resolve hostname specified on cmd-line
-	struct hostent* h = gethostbyname(arg_host);
+	struct hostent* h = gethostbyname(name);
 	if(0 == h)
 	{
-		fprintf(stderr, "Unable to resolve host '%s'\n", arg_host);
+		fprintf(stderr, "Unable to resolve host '%s'\n", name);
 		return EXIT_FAILURE;
 	}
 
 	// Check if there are any aliases and if so print header - Alias(es)
 	if(h->h_aliases[0] != 0) 
 	{
-		fprintf(stdout, "Alias(es)\n");
+		fprintf(stdout, "Alias(es):\n");
 	}
 
 	// Print all aliases
@@ -60,7 +52,7 @@ int main(int argc, char** argv)
 	// Check if there are any IPs and if so print header - IP(s)
     if(h->h_addr_list[0] != 0)
     {
-		fprintf(stdout, "IP(s)\n");
+		fprintf(stdout, "IP(s):\n");
 	}
 
 	// Allocate space for IP converted to string
@@ -76,6 +68,23 @@ int main(int argc, char** argv)
         fprintf(stdout, "%s\n", ip);
     }
 
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
+	// Check if there was any hostname specified on cmd-line
+	if(argc < 2) 
+	{
+		fprintf(stderr, "%s\n", "No hostname specified!");
+		return EXIT_FAILURE;
+	}
+
+	for(int i = 1; i < argc; i++)
+	{
+		resolve(argv[i]);	
+	}
+	
     // End with success error code - 0
 	return EXIT_SUCCESS;      // Declared in <stdlib.h>
 }
