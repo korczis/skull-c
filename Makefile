@@ -22,5 +22,5 @@ test: build
 	./build/bin/dns_lookup "google.com" "seznam.cz" "root.cz"
 	./build/bin/hello_world "travis"
 	./build/bin/http_client http://google.com
-	./build/bin/icmp_client http://google.com
+	# ./build/bin/icmp_client http://google.com
 	./build/bin/thread 6
